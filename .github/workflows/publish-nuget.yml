@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     branches:
-      - masterrrr
+      - master
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -40,14 +40,14 @@ jobs:
         VERSION="1.1.$(date +'%Y%m%d.%H%M%S')"
         echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
 
-    - name: Restore dependencies
-      run: dotnet restore Cash.Sdk/Cash.Sdk.csproj
+    - name: Restore Dependencies
+      run: dotnet restore
 
-    - name: Build the project
-      run: dotnet build Cash.Sdk/Cash.Sdk.csproj --configuration Release --no-restore
+    - name: Build Project
+      run: dotnet build --configuration Release  # Ensures the project is built.
 
-    - name: Pack the NuGet package with versioning
-      run: dotnet pack Cash.Sdk/Cash.Sdk.csproj --configuration Release --no-build --output ./Cash.Sdk/bin/Release /p:PackageVersion=${{ env.PACKAGE_VERSION }}
+    - name: Build and Pack
+      run: dotnet pack --configuration Release --output ./bin/Release  # Explicit output directory.
 
     - name: Verify Files in bin/Release
       run: ls -al ./Cash.Sdk/bin/Release
