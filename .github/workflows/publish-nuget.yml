@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -44,13 +45,20 @@ jobs:
       run: dotnet restore
 
     - name: Build Project
-      run: dotnet build --configuration Release  # Ensures the project is built.
+      run: dotnet build --configuration Release
 
     - name: Build and Pack
-      run: dotnet pack --configuration Release --output ./bin/Release  # Explicit output directory.
+      run: |
+        dotnet pack \
+          --configuration Release \
+          --output ./bin/Release \
+          /p:PackageVersion=${{ env.PACKAGE_VERSION }}
 
     - name: Verify Files in bin/Release
-      run: ls -al ./Cash.Sdk/bin/Release
+      run: ls -al ./bin/Release
 
     - name: Publish Package to GitHub Packages
-      run: dotnet nuget push ./Cash.Sdk/bin/Release/*.nupkg --source github --api-key ${{ secrets.SECRETTOKEN }}
+      run: |
+        dotnet nuget push ./bin/Release/*.nupkg \
+          --source github \
+          --api-key ${{ secrets.SECRETTOKEN }}
