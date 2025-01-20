@@ -1,3 +1,4 @@
+
 name: Publish Package
 
 on:
@@ -61,4 +62,4 @@ jobs:
       run: |
         dotnet nuget push ./bin/Release/*.nupkg \
           --source github \
-          --api-key ${{ secrets.SECRETTOKEN }}
+          --api-key ${{ secrets.Your_Token_Secret }}
